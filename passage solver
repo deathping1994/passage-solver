@@ -1,0 +1,249 @@
+// passage solver initial code from hackerrank
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+
+public class Solution {
+
+	public static String rmQm(String str)
+	{
+		str=str.replace("?","");
+	    str=str.replace("What", "");
+	    str=str.replace("Which","");
+	    str=str.replace("Why","");
+	    str=str.replace("How","");
+	    str=str.replace("When","");
+	    str=str.replace("In which","");
+	    str=str.replace("are","");
+	    str=str.replace("is","");
+	    str=str.replace("are","");
+	    str=str.replace("of","");
+	    str=str.replace("the","");
+	    str=str.replace("in","");
+	    str=str.replace("do","");
+	    str=str.replace("did","");
+		
+		return str;
+	}
+	//public static 
+	public static void main(String[] args) {
+	
+	
+		 Scanner input = new Scanner(System.in);
+			String para = input.nextLine();
+			para=para.replaceAll("[.]", "+");
+		    para=para.replaceAll("[+][\\s]", ". ");
+			String[] ques = new String[5];
+			for(int j=0;j<5;j++)
+			{		
+			ques[j] = input.nextLine();
+			ques[j]=rmQm(ques[j]);
+			}
+			String[] ans = new String[5];
+			int i=0;
+			String answers = input.nextLine();
+			StringTokenizer st = new StringTokenizer(answers,";");
+			while(st.hasMoreTokens())
+			{
+				ans[i]=st.nextToken();
+	            i++;
+			}
+			StringTokenizer st1 = new StringTokenizer(para,".");
+			ArrayList <String> ar = new ArrayList <String>();
+			while(st1.hasMoreTokens())
+			{
+				ar.add(st1.nextToken());
+			}
+			int len_of_lines=ar.size();
+			
+			int[][] aseq= new int[5][len_of_lines];
+			int[][] qseq= new int[5][len_of_lines];
+			for(int j=0;j<5;j++)
+			{
+				for(int k=0;k<len_of_lines;k++)
+				{
+					if(ar.get(k).toLowerCase().contains(ques[j].toLowerCase()))
+					{
+						aseq[j][k]=999;
+					}
+					else  
+					{
+						
+					
+				       ArrayList <String> q_word = new ArrayList <String>();
+				       StringTokenizer st2= new StringTokenizer(ques[j]);
+				       while(st2.hasMoreTokens())
+				        {
+					     q_word.add(st2.nextToken());
+				        }
+			
+				       int count_word=q_word.size();
+				       for(int a=0;a<count_word;a++)
+				        {
+				    	   if(ar.get(k).toLowerCase().contains(q_word.get(a).toLowerCase()))
+				    	   {
+				    		   aseq[j][k]+=1;
+				    	   }
+				    	   if(a<count_word-1)
+				    	   {
+				    	   String word_2=q_word.get(a)+" "+q_word.get(a+1);
+				    	   
+				    	      if(ar.get(k).toLowerCase().contains(word_2.toLowerCase()))
+				    	      {
+				    		   aseq[j][k]+=3;
+				    	       }
+				            }
+				    	   if(a<count_word-2)
+				    	   {
+				    		   String word_3=q_word.get(a)+" "+q_word.get(a+1)+" "+q_word.get(a+2);
+					    	   if(ar.get(k).toLowerCase().contains(word_3.toLowerCase()))
+					    	   {
+					    		   aseq[j][k]+=5;
+					    	   }  
+				    	   }
+				    	   
+				        }
+			       }
+				}
+			}
+			for(int j=0;j<5;j++)
+			{
+				for(int k=0;k<len_of_lines;k++)
+				{
+					if(ar.get(k).toLowerCase().contains(ans[j].toLowerCase()))
+					{
+						qseq[j][k]=999;
+					}
+					else  
+					{
+						
+					
+				       ArrayList <String> a_word = new ArrayList <String>();
+				       StringTokenizer st2= new StringTokenizer(ans[j]);
+				       while(st2.hasMoreTokens())
+				        {
+					     a_word.add(st2.nextToken());
+				        }
+			
+				       int count_word=a_word.size();
+				       for(int a=0;a<count_word;a++)
+				        {
+				    	   if(ar.get(k).toLowerCase().contains(a_word.get(a).toLowerCase()))
+				    	   {
+				    		   qseq[j][k]+=1;
+				    	   }
+				    	   if(a<count_word-1)
+				    	   {
+				    		   
+				    	   
+				    	   String word_2=a_word.get(a)+" "+a_word.get(a+1);
+				    	   if(ar.get(k).toLowerCase().contains(word_2.toLowerCase()))
+				    	   {
+				    		   qseq[j][k]+=3;
+				    	   }
+				    	   }
+				    	   if(a<count_word-2)
+				    	   {
+				    		   String word_3=a_word.get(a)+" "+a_word.get(a+1)+" "+a_word.get(a+2);
+					    	   if(ar.get(k).toLowerCase().contains(word_3.toLowerCase()))
+					    	   {
+					    		   qseq[j][k]+=5;
+					    	   }  
+				    	   }
+				    	   
+				        }
+			       }
+				}
+			}
+			
+			int[] q_line = new int[5];
+			int[] a_line = new int[5];
+			int[] line  = new int[len_of_lines];
+			for(int j=0;j<5;j++)
+			{
+				for(int k=0;k<len_of_lines;k++)
+				{
+					line[k]=aseq[j][k];
+				}
+					
+				int largest = line[0], index = 0;
+				for (int o = 1; o < line.length; o++) {
+				  if ( line[o] > largest ) {
+				      largest = line[o];
+				      index = o;
+				   }
+				  q_line[j]=index;
+				}
+			}
+			for(int j=0;j<5;j++)
+			{
+				for(int k=0;k<len_of_lines;k++)
+				{
+					line[k]=qseq[j][k];
+				}
+					
+				int largest = line[0], index = 0;
+				for (int o = 1; o < line.length; o++) {
+				  if ( line[o] > largest ) {
+				      largest = line[o];
+				      index = o;
+				   }
+				  a_line[j]=index;
+				}
+			}
+			String[] final_ans= new String[5];
+			
+		
+			for(int j=0;j<5;j++)
+			{
+				for(int k=0;k<5;k++)
+				{
+					if(q_line[j]==a_line[k])
+					{
+						final_ans[j]=ans[k];
+				
+					}
+
+						
+				
+				}
+			}
+			int vacant_ans=0;
+			
+			for(int j=0;j<5;j++)
+			{
+				
+				if(final_ans[j]==null)
+				{
+					
+					vacant_ans=j;
+	
+				}
+			}
+        int[] flag={0,0,0,0,0};
+		
+		for(int j=0;j<5;j++)
+		{
+			for(int k=0;k<5;k++)
+			{
+				if(ans[j].equalsIgnoreCase(final_ans[k]))
+				{
+					flag[j]=1;
+				}
+			}
+			if(flag[j]==0)
+			{
+				final_ans[vacant_ans]=ans[j];
+			
+			}
+		}
+		
+			for(int j=0;j<5;j++)
+				System.out.println(final_ans[j]);
+			
+	}
+
+}
