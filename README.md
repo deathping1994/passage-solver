@@ -1,6 +1,8 @@
 # passage-solver
 Algo project to solve simple unseen passages given in English exams. 
 This project was created just to test implementation of various string matching algorithms, so the program does not offer optimal solutions.
+
+Note: This project was inspired from a question on hackerrank so Solver.java has parts of code borrowed from one of the submitted solutions
 #Objective
   To implement and test various String matching algorithms
 #Usage
